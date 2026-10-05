@@ -1,6 +1,11 @@
+
 import { getLeaderboard } from '../db.js';
 
 export async function handleLeaderboard(ctx) {
+  if (ctx.chat.type === 'group' || ctx.chat.type === 'supergroup') {
+    await ctx.deleteMessage().catch(() => {});
+  }
+
   const topUsers = await getLeaderboard(10);
 
   if (!topUsers || topUsers.length === 0) {

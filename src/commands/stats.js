@@ -1,6 +1,10 @@
 import { getUserStats } from '../db.js';
 
 export async function handleStats(ctx) {
+  if (ctx.chat.type === 'group' || ctx.chat.type === 'supergroup') {
+    await ctx.deleteMessage().catch(() => {});
+  }
+
   const user = ctx.from;
   if (!user) return;
 

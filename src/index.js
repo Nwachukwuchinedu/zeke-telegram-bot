@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import http from 'http';
 import { Bot } from 'grammy';
 import { connectDB } from './db.js';
 import { handleInvite } from './commands/invite.js';
@@ -27,6 +28,9 @@ const bot = new Bot(token);
 
 // 3. Register Commands
 bot.command('start', async (ctx) => {
+  if (ctx.chat.type === 'group' || ctx.chat.type === 'supergroup') {
+    await ctx.deleteMessage().catch(() => {});
+  }
   const welcomeText = 
 `👋 *Welcome to the Community Invite Tracker Bot!*
 
@@ -46,6 +50,9 @@ bot.command(['leaderboard', 'top'], handleLeaderboard);
 bot.command(['stats', 'myinvites'], handleStats);
 
 bot.command('id', async (ctx) => {
+  if (ctx.chat.type === 'group' || ctx.chat.type === 'supergroup') {
+    await ctx.deleteMessage().catch(() => {});
+  }
   await ctx.reply(
     `📌 *Chat Information:*\n• Title: *${ctx.chat.title || 'Private'}*\n• Chat ID: \`${ctx.chat.id}\``,
     { parse_mode: 'Markdown' }
@@ -53,6 +60,9 @@ bot.command('id', async (ctx) => {
 });
 
 bot.command('help', async (ctx) => {
+  if (ctx.chat.type === 'group' || ctx.chat.type === 'supergroup') {
+    await ctx.deleteMessage().catch(() => {});
+  }
   const helpText = 
 `📖 *Bot Help & Instructions*
 
@@ -95,3 +105,15 @@ bot.start({
     console.log('Listening for messages and chat join events...');
   },
 });
+
+// 8. Start lightweight HTTP server for Render Port Binding / Health Check
+const PORT = process.env.PORT || 3000;
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Telegram Invite Bot is running healthy!\n');
+});
+
+server.listen(PORT, () => {
+  console.log(`🌐 Health-check HTTP server listening on port ${PORT}`);
+});
+

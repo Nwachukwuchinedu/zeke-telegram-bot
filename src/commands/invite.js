@@ -1,6 +1,11 @@
 import { getOrCreateUser, saveUserInviteLink } from '../db.js';
 
 export async function handleInvite(ctx) {
+  // Automatically delete the user's trigger message in groups to keep chat clean
+  if (ctx.chat.type === 'group' || ctx.chat.type === 'supergroup') {
+    await ctx.deleteMessage().catch(() => {});
+  }
+
   const user = ctx.from;
   if (!user) return;
 
