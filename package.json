@@ -1,0 +1,26 @@
+{
+  "name": "telegram-invite-tracker-bot",
+  "version": "1.0.0",
+  "description": "Telegram Invite Tracking and Leaderboard Bot in JavaScript",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "grammy": "^1.35.0",
+    "mongoose": "^8.10.1"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "invite-tracker",
+    "leaderboard",
+    "grammy",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT"
+}
